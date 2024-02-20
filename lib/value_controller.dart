@@ -1,19 +1,16 @@
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 
 class ValueController extends GetxController {
-  String definedValue = '';
+  RxString definedValue = ''.obs;
 
-  bool isLoading = false;
+  RxBool isLoading = false.obs;
 
   Future<void> setValue(String value) async {
-    isLoading = true;
-    update();
+    isLoading.value = true;
 
     await Future.delayed(const Duration(milliseconds: 2000));
 
-    definedValue = value;
-
-    isLoading = false;
-    update();
+    definedValue.value = value;
+    isLoading.value = false;
   }
 }
