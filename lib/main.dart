@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:getx_example/value_controller.dart';
+import 'package:getx_example/user_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,8 +22,13 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  final textController = TextEditingController();
-  final valueController = ValueController();
+  final nameController = TextEditingController();
+  final ageController = TextEditingController();
+
+  final UserController _userController = UserController();
+
+  TextStyle commonStyle() =>
+      const TextStyle(fontSize: 17, fontWeight: FontWeight.w500);
 
   @override
   Widget build(BuildContext context) {
@@ -32,38 +37,70 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // value
-            GetX<ValueController>(
-              init: valueController, // attention
-              builder: (controller) {
-                return Text('Value defined: ${controller.definedValue.value}');
-              },
+            /**
+             * Apresentação do nome
+             */
+            Obx(() => Text(
+                  'Name: ${_userController.user.value.name}',
+                  style: commonStyle(),
+                )),
+
+            /**
+             * Apresentação da idade
+             */
+            Obx(() => Text(
+                  'Age: ${_userController.user.value.age}',
+                  style: commonStyle(),
+                )),
+            const Divider(
+              thickness: 1.5,
+              color: Colors.blue,
+              height: 20,
             ),
-
-            // textfield
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
-              child: TextField(
-                controller: textController,
-              ),
+            /**
+             * Name form
+             */
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: nameController,
+                    decoration: const InputDecoration(labelText: 'Name'),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _userController.setUserName(nameController.text);
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
             ),
-
-            // btn
-            GetX<ValueController>(
-              init: valueController,
-              builder: (controller) {
-                return controller.isLoading.value
-                    ? const CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: () {
-                          String value = textController.text;
-
-                          valueController.setValue(value);
-                        },
-                        child: const Text('Confirm'),
-                      );
-              },
+            const SizedBox(height: 10),
+            /**
+             * Age form
+             */
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: ageController,
+                    decoration: const InputDecoration(
+                      labelText: 'Age',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _userController.setUserAge(int.parse(ageController.text));
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
             ),
           ],
         ),
