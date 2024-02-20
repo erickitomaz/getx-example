@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:getx_example/value_controller.dart';
 
 void main() {
@@ -34,23 +34,26 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // value
-            GetBuilder<ValueController>(
+            GetX<ValueController>(
               init: valueController, // attention
               builder: (controller) {
-                return Text('Value defined: ${controller.definedValue}');
+                return Text('Value defined: ${controller.definedValue.value}');
               },
             ),
 
             // textfield
-            TextField(
-              controller: textController,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32),
+              child: TextField(
+                controller: textController,
+              ),
             ),
 
             // btn
-            GetBuilder<ValueController>(
+            GetX<ValueController>(
               init: valueController,
               builder: (controller) {
-                return controller.isLoading
+                return controller.isLoading.value
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: () {
