@@ -34,11 +34,9 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // value
-            GetX<ValueController>(
-              init: valueController, // attention
-              builder: (controller) {
-                return Text('Value defined: ${controller.definedValue.value}');
-              },
+            Obx(
+              () =>
+                  Text('Value defined: ${valueController.definedValue.value}'),
             ),
 
             // textfield
@@ -50,20 +48,17 @@ class HomePage extends StatelessWidget {
             ),
 
             // btn
-            GetX<ValueController>(
-              init: valueController,
-              builder: (controller) {
-                return controller.isLoading.value
-                    ? const CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: () {
-                          String value = textController.text;
+            Obx(
+              () => valueController.isLoading.value
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () {
+                        String value = textController.text;
 
-                          valueController.setValue(value);
-                        },
-                        child: const Text('Confirm'),
-                      );
-              },
+                        valueController.setValue(value);
+                      },
+                      child: const Text('Confirm'),
+                    ),
             ),
           ],
         ),
